@@ -1,7 +1,7 @@
 ##==============================================================================
 ## Tk::Stderr - capture program standard error output
 ##==============================================================================
-## $Id: Stderr.pm,v 1.1 2003/03/26 21:48:43 kevin Exp $
+## $Id: Stderr.pm,v 1.2 2003/04/01 03:58:42 kevin Exp $
 ##==============================================================================
 require 5.006;
 
@@ -9,7 +9,7 @@ package Tk::Stderr;
 use strict;
 use warnings;
 use vars qw($VERSION @ISA);
-($VERSION) = q$Revision: 1.1 $ =~ /Revision:\s+(\S+)/ or $VERSION = "0.0";
+($VERSION) = q$Revision: 1.2 $ =~ /Revision:\s+(\S+)/ or $VERSION = "0.0";
 use base qw(Tk::Derived Tk::MainWindow);
 
 use Tk::ROText;
@@ -44,6 +44,7 @@ sub Populate {
 	my ($mw, $args) = @_;
 	my $private = $mw->privateData;
 	$private->{ReferenceCount} = 0;
+	$private->{Enabled} = 0;
 
 	$mw->SUPER::Populate($args);
 
@@ -66,9 +67,28 @@ sub Populate {
 		'-title' => [ qw/METHOD title Title/, 'Standard Error Output' ],
 	);
 
-	tie *STDERR, 'Tk::Stderr::Handle', $mw;
+	$mw->Redirect(1);
+	
+	return $mw;
+}
 
-	$SIG{__WARN__} = sub { print STDERR @_ };
+##==============================================================================
+## Redirect
+##==============================================================================
+sub Redirect {
+	my ($mw, $boolean) = @_;
+	my $private = $mw->privateData;
+	my $old = $private->{Enabled};
+	
+	if ($old && !$boolean) {
+		untie *STDERR;
+		$SIG{__WARN__} = 'DEFAULT';
+	} elsif (!$old && $boolean) {
+		tie *STDERR, 'Tk::Stderr::Handle', $mw;
+		$SIG{__WARN__} = sub { print STDERR @_ };
+	}
+	$private->{Enabled} = $boolean;
+	return $old;
 }
 
 ##==============================================================================
@@ -180,6 +200,32 @@ sub StderrWindow {
 
 =pod
 
+=item I<$old> = I<$mw>->RedirectStderr(I<$boolean>);
+
+Enables or disables the redirection of standard error to the text window. Set
+I<$boolean> to true to enable redirection, false to disable it. Returns the
+previous value of the enabled flag.
+
+If B<InitStderr> has never been called, this routine will call it if I<$boolean>
+is true.
+
+=cut
+
+##==============================================================================
+## RedirectStderr
+##==============================================================================
+sub RedirectStderr {
+	my ($mw, $boolean) = @_;
+	
+	unless (defined $error_window) {
+		$mw->InitStderr if $boolean;
+		return;
+	}
+	return $error_window->Redirect($boolean);
+}
+
+=pod
+
 =back
 
 =head1 AUTHOR
@@ -232,6 +278,9 @@ BEGIN {
 
 ##==============================================================================
 ## $Log: Stderr.pm,v $
+## Revision 1.2  2003/04/01 03:58:42  kevin
+## Add RedirectStderr method to allow redirection to be switched on and off.
+##
 ## Revision 1.1  2003/03/26 21:48:43  kevin
 ## Fix dependencies in Makefile.PL
 ##

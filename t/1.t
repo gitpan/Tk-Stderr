@@ -27,6 +27,12 @@ sub testsub {
 		print STDERR "Done!\n";
 		$mw->destroy;
 	} else {
+		if ($index == 10) {
+			$mw->RedirectStderr(0);
+			print STDERR "\nThere should be two lines following this one:\n";
+		} elsif ($index == 12) {
+			$mw->RedirectStderr(1);
+		}
 		if ($index & 1) {
 			printf STDERR "Printed to STDERR, line %03d\n", $index;
 		} else {

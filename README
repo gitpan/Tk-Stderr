@@ -34,5 +34,8 @@ CHANGES
 
     Version 1.1 just adds a dependency for Tk in the Makefile.PL file.
 
+    Version 1.2 adds the RedirectStderr method to allow redirection
+    to be turned on and off during the execution of a program.
+
 AUTHOR
     Kevin Michael Vail <kevin@vaildc.net>
