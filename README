@@ -30,5 +30,9 @@ COPYRIGHT AND LICENCE
     This library is free software; you can redistribute it and/or modify
     it under the same terms as Perl itself. 
 
+CHANGES
+
+    Version 1.1 just adds a dependency for Tk in the Makefile.PL file.
+
 AUTHOR
     Kevin Michael Vail <kevin@vaildc.net>

@@ -1,7 +1,7 @@
 ##==============================================================================
 ## Tk::Stderr - capture program standard error output
 ##==============================================================================
-## $Id: Stderr.pm,v 1.0 2003/03/26 19:11:32 kevin Exp $
+## $Id: Stderr.pm,v 1.1 2003/03/26 21:48:43 kevin Exp $
 ##==============================================================================
 require 5.006;
 
@@ -9,7 +9,7 @@ package Tk::Stderr;
 use strict;
 use warnings;
 use vars qw($VERSION @ISA);
-($VERSION) = q$Revision: 1.0 $ =~ /Revision:\s+(\S+)/ or $VERSION = "0.0";
+($VERSION) = q$Revision: 1.1 $ =~ /Revision:\s+(\S+)/ or $VERSION = "0.0";
 use base qw(Tk::Derived Tk::MainWindow);
 
 use Tk::ROText;
@@ -31,7 +31,9 @@ Tk::Stderr - capture standard error output, display in separate window
 
 =head1 DESCRIPTION
 
-This module captures that standard error of a program and redirects it to a read only text widget, which doesn't appear until necessary. When it does appear, the user can close it; it'll appear again when there is more output.
+This module captures that standard error of a program and redirects it to a read
+only text widget, which doesn't appear until necessary. When it does appear, the
+user can close it; it'll appear again when there is more output.
 
 =cut
 
@@ -107,7 +109,8 @@ The first time this method called, it does the following things:
 
 =item o
 
-Creates a MainWindow holding a read-only scrollable text widget, and withdraws this window until it's actually needed.
+Creates a MainWindow holding a read-only scrollable text widget, and withdraws
+this window until it's actually needed.
 
 =item o
 
@@ -115,7 +118,8 @@ Ties STDERR to a special handle that adds the output to this text widget.
 
 =item o
 
-Installs a C<< $SIG{__WARN__} >> handler that redirects the output from B<warn> to this window as well (by printing it to STDERR).
+Installs a C<< $SIG{__WARN__} >> handler that redirects the output from B<warn>
+to this window as well (by printing it to STDERR).
 
 =back
 
@@ -129,7 +133,8 @@ Increments a reference count of "other" MainWindows.
 
 =item o
 
-Installs an OnDestroy handler that decrements this reference count, so that it can detect when it's the only MainWindow left and destroy itself.
+Installs an OnDestroy handler that decrements this reference count, so that it
+can detect when it's the only MainWindow left and destroy itself.
 
 =back
 
@@ -160,7 +165,9 @@ sub InitStderr {
 
 =item I<$errwin> = I<$mw>->StderrWindow;
 
-Returns a reference to the main window holding the text. You can use this to configure the window itself or the widgets it contains. The only advertised subwidget is 'text', which is the scrolled read-only text widget.
+Returns a reference to the main window holding the text. You can use this to
+configure the window itself or the widgets it contains. The only advertised
+subwidget is 'text', which is the scrolled read-only text widget.
 
 =cut
 
@@ -225,7 +232,9 @@ BEGIN {
 
 ##==============================================================================
 ## $Log: Stderr.pm,v $
+## Revision 1.1  2003/03/26 21:48:43  kevin
+## Fix dependencies in Makefile.PL
+##
 ## Revision 1.0  2003/03/26 19:11:32  kevin
 ## Initial revision
-##
 ##==============================================================================
