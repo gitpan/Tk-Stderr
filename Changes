@@ -1,0 +1,6 @@
+Revision history for Perl extension Tk::Stderr.
+
+0.01  Wed Mar 26 13:34:22 2003
+	- original version; created by h2xs 1.22 with options
+		-XA -b 5.6.0 Tk::Stderr
+
